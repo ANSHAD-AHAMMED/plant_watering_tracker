@@ -4,7 +4,8 @@
 
 {% block content %}
 <div class="history-header" style="text-align: center; margin-bottom: 3rem;">
-    <div class="card" style="max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, var(--light-green), #f0f9f4); border: 1px solid var(--primary-green);">
+    <div class="card"
+         style="max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, var(--light-green), #f0f9f4); border: 1px solid var(--primary-green);">
         <h1 style="color: var(--primary-green); margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem;">
             📜 Watering History
         </h1>
@@ -13,15 +14,21 @@
         </h2>
         <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: 1.5rem;">
             <div style="text-align: center;">
-                <div style="color: var(--primary-green); font-weight: 600; font-size: var(--font-size-lg);">{{ plant.history|length }}</div>
+                <div style="color: var(--primary-green); font-weight: 600; font-size: var(--font-size-lg);">{{
+                    plant.history|length }}
+                </div>
                 <div style="color: var(--text-secondary); font-size: var(--font-size-sm);">Total Waterings</div>
             </div>
             <div style="text-align: center;">
-                <div style="color: var(--primary-green); font-weight: 600; font-size: var(--font-size-lg);">{{ plant.frequency }}</div>
+                <div style="color: var(--primary-green); font-weight: 600; font-size: var(--font-size-lg);">{{
+                    plant.frequency }}
+                </div>
                 <div style="color: var(--text-secondary); font-size: var(--font-size-sm);">Days Frequency</div>
             </div>
             <div style="text-align: center;">
-                <div style="color: var(--primary-green); font-weight: 600; font-size: var(--font-size-lg);">{{ plant.last_watered.strftime('%b %d') }}</div>
+                <div style="color: var(--primary-green); font-weight: 600; font-size: var(--font-size-lg);">{{
+                    plant.last_watered.strftime('%b %d') }}
+                </div>
                 <div style="color: var(--text-secondary); font-size: var(--font-size-sm);">Last Watered</div>
             </div>
         </div>
@@ -40,11 +47,11 @@
                 <div style="color: var(--text-secondary); font-size: var(--font-size-sm); margin-top: 0.5rem;">
                     {% set days_ago = (plant.last_watered - record.date).days %}
                     {% if days_ago == 0 %}
-                        Today
+                    Today
                     {% elif days_ago == 1 %}
-                        Yesterday
+                    Yesterday
                     {% else %}
-                        {{ days_ago }} days ago
+                    {{ days_ago }} days ago
                     {% endif %}
                 </div>
                 <div style="margin-top: 0.75rem; padding: 0.5rem; background: var(--light-green); border-radius: var(--radius-sm); font-size: var(--font-size-sm);">
@@ -54,11 +61,11 @@
             <div class="timeline-dot"></div>
         </div>
         {% endfor %}
-        
+
         <!-- Future watering indicator -->
-        {% set next_watering = plant.last_watered + plant.frequency * 86400 %}
         <div class="timeline-item" style="opacity: 0.6;">
-            <div class="timeline-content" style="border: 2px dashed var(--primary-green); background: var(--background);">
+            <div class="timeline-content"
+                 style="border: 2px dashed var(--primary-green); background: var(--background);">
                 <div class="timeline-date" style="color: var(--text-secondary);">
                     🕰️ Next Watering
                 </div>
@@ -71,6 +78,7 @@
             </div>
             <div class="timeline-dot" style="background: var(--accent-yellow); border-color: var(--background);"></div>
         </div>
+    </div>
     </div>
 </section>
 {% else %}
@@ -108,29 +116,35 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; text-align: center;">
             {% set history_list = plant.history|list %}
             {% if history_list|length > 1 %}
-                {% set dates = history_list|map(attribute='date')|list|sort %}
-                {% set date_diffs = [] %}
-                {% for i in range(1, dates|length) %}
-                    {% set diff = (dates[i] - dates[i-1]).days %}
-                    {% if date_diffs.append(diff) %}{% endif %}
-                {% endfor %}
-                {% if date_diffs %}
-                    {% set avg_interval = (date_diffs|sum / date_diffs|length)|round(1) %}
-                    <div>
-                        <div style="color: var(--primary-green); font-weight: 600; font-size: var(--font-size-lg);">{{ avg_interval }} days</div>
-                        <div style="color: var(--text-secondary); font-size: var(--font-size-sm);">Average Interval</div>
-                    </div>
-                {% endif %}
-            {% endif %}
-            
+            {% set dates = history_list|map(attribute='date')|list|sort %}
+            {% set date_diffs = [] %}
+            {% for i in range(1, dates|length) %}
+            {% set diff = (dates[i] - dates[i-1]).days %}
+            {% if date_diffs.append(diff) %}{% endif %}
+            {% endfor %}
+            {% if date_diffs %}
+            {% set avg_interval = (date_diffs|sum / date_diffs|length)|round(1) %}
             <div>
-                <div style="color: var(--primary-green); font-weight: 600; font-size: var(--font-size-lg);">{{ (plant.history|first).date.strftime('%b %d') }}</div>
+                <div style="color: var(--primary-green); font-weight: 600; font-size: var(--font-size-lg);">{{
+                    avg_interval }} days
+                </div>
+                <div style="color: var(--text-secondary); font-size: var(--font-size-sm);">Average Interval</div>
+            </div>
+            {% endif %}
+            {% endif %}
+
+            <div>
+                <div style="color: var(--primary-green); font-weight: 600; font-size: var(--font-size-lg);">{{
+                    (plant.history|first).date.strftime('%b %d') }}
+                </div>
                 <div style="color: var(--text-secondary); font-size: var(--font-size-sm);">First Recorded</div>
             </div>
-            
+
             {% set days_tracking = (plant.last_watered - (plant.history|first).date).days + 1 %}
             <div>
-                <div style="color: var(--primary-green); font-weight: 600; font-size: var(--font-size-lg);">{{ days_tracking }} days</div>
+                <div style="color: var(--primary-green); font-weight: 600; font-size: var(--font-size-lg);">{{
+                    days_tracking }} days
+                </div>
                 <div style="color: var(--text-secondary); font-size: var(--font-size-sm);">Tracking Period</div>
             </div>
         </div>
@@ -142,34 +156,34 @@
 {% block scripts %}
 {{ super() }}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Stagger timeline animations
-    const timelineItems = document.querySelectorAll('.timeline-item');
-    timelineItems.forEach((item, index) => {
-        item.style.animationDelay = `${index * 0.15}s`;
-    });
-    
-    // Add scroll-triggered animations for timeline items
-    if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
+    document.addEventListener('DOMContentLoaded', function() {
+        // Stagger timeline animations
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        timelineItems.forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.15}s`;
+        });
+
+        // Add scroll-triggered animations for timeline items
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '50px'
             });
-        }, {
-            threshold: 0.1,
-            rootMargin: '50px'
-        });
-        
-        timelineItems.forEach(item => {
-            item.style.opacity = '0';
-            item.style.transform = 'translateY(20px)';
-            item.style.transition = 'all 0.6s ease-out';
-            observer.observe(item);
-        });
-    }
-});
+
+            timelineItems.forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                item.style.transition = 'all 0.6s ease-out';
+                observer.observe(item);
+            });
+        }
+    });
 </script>
 {% endblock %}
