@@ -1,17 +1,116 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Plant</title>
-</head>
-<body>
-    <h1>➕ Add a New Plant</h1>
-    <form method="POST">
-        <label>Plant Name:</label>
-        <input type="text" name="name" required><br><br>
-        <label>Watering Frequency (days):</label>
-        <input type="number" name="frequency" required><br><br>
-        <button type="submit">Add Plant</button>
-    </form>
-    <a href="{{ url_for('index') }}">⬅️ Back</a>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Add Plant - Plant Watering Tracker{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="color: var(--primary-green); margin-bottom: 0.5rem;">🌱 Add a New Plant</h2>
+            <p style="color: var(--text-secondary);">Track a new plant's watering schedule</p>
+        </div>
+        
+        <form method="POST" class="plant-form">
+            <div class="form-group">
+                <label for="name" class="form-label">
+                    🏷️ Plant Name
+                </label>
+                <input type="text" 
+                       id="name" 
+                       name="name" 
+                       class="form-input" 
+                       placeholder="e.g., Snake Plant, Peace Lily" 
+                       required 
+                       maxlength="100"
+                       autocomplete="off">
+                <small style="color: var(--text-secondary); font-size: var(--font-size-xs); margin-top: 0.25rem; display: block;">
+                    Give your plant a memorable name
+                </small>
+            </div>
+            
+            <div class="form-group">
+                <label for="frequency" class="form-label">
+                    ⏰ Watering Frequency
+                </label>
+                <input type="number" 
+                       id="frequency" 
+                       name="frequency" 
+                       class="form-input" 
+                       placeholder="7" 
+                       min="1" 
+                       max="365" 
+                       required 
+                       autocomplete="off">
+                <small style="color: var(--text-secondary); font-size: var(--font-size-xs); margin-top: 0.25rem; display: block;">
+                    How many days between waterings? (1-365 days)
+                </small>
+            </div>
+            
+            <div class="form-group" style="margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; font-size: var(--font-size-base);">
+                    🌱 Add Plant to Collection
+                </button>
+            </div>
+        </form>
+        
+        <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-light);">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                ⬅️ Back to Plants
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Additional helpful info -->
+<div class="form-container" style="margin-top: 2rem;">
+    <div class="card" style="background: linear-gradient(135deg, var(--light-green), #f0f9f4); border: 1px solid var(--primary-green);">
+        <h3 style="color: var(--primary-green); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            💡 Watering Tips
+        </h3>
+        <ul style="color: var(--text-secondary); margin: 0; padding-left: 1.5rem; line-height: 1.8;">
+            <li><strong>Most houseplants:</strong> 7-10 days</li>
+            <li><strong>Succulents:</strong> 14-21 days</li>
+            <li><strong>Tropical plants:</strong> 3-5 days</li>
+            <li><strong>Herbs:</strong> 2-3 days</li>
+        </ul>
+        <p style="color: var(--text-secondary); margin-top: 1rem; font-size: var(--font-size-sm); font-style: italic;">
+            💧 Remember: You can always adjust the frequency later based on your plant's needs!
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const nameInput = document.getElementById('name');
+    const frequencyInput = document.getElementById('frequency');
+    
+    // Add input validation feedback
+    [nameInput, frequencyInput].forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.validity.valid) {
+                this.style.borderColor = 'var(--success-green)';
+            } else {
+                this.style.borderColor = 'var(--danger-red)';
+            }
+        });
+        
+        input.addEventListener('input', function() {
+            this.style.borderColor = 'var(--border-light)';
+        });
+    });
+    
+    // Auto-focus on name input
+    nameInput.focus();
+    
+    // Suggest common frequencies
+    frequencyInput.addEventListener('focus', function() {
+        if (!this.value) {
+            this.placeholder = '7 (recommended for most plants)';
+        }
+    });
+});
+</script>
+{% endblock %}

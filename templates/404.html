@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found - PlantCare{% endblock %}
+
+{% block content %}
+<section class="error-section">
+    <div class="error-content">
+        <div class="error-illustration">
+            <div class="wilted-plant">
+                <span class="error-pot">🪴</span>
+                <div class="error-leaves">
+                    <span class="wilted-leaf">🥀</span>
+                    <span class="wilted-leaf">🥀</span>
+                    <span class="wilted-leaf">🥀</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="error-text">
+            <h1 class="error-code">404</h1>
+            <h2 class="error-title">Oops! This page seems to have wilted away</h2>
+            <p class="error-message">
+                Just like a forgotten plant, this page couldn't be found. 
+                Don't worry though - let's get you back to caring for your green friends!
+            </p>
+            
+            <div class="error-suggestions">
+                <h3>Here are some places you might want to visit:</h3>
+                <ul class="suggestion-list">
+                    <li><a href="{{ url_for('index') }}">🏠 Go back to your plant dashboard</a></li>
+                    <li><a href="{{ url_for('add') }}">➕ Add a new plant to your collection</a></li>
+                    <li><a href="{{ url_for('about') }}">ℹ️ Learn more about PlantCare</a></li>
+                </ul>
+            </div>
+            
+            <div class="error-actions">
+                <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">
+                    🌱 Back to Plants
+                </a>
+                <a href="javascript:history.back()" class="btn btn-secondary btn-lg">
+                    ⬅️ Go Back
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.error-section {
+    padding: var(--spacing-2xl) 0;
+    background: linear-gradient(135deg, var(--background), var(--light-green));
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-2xl);
+    align-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.error-illustration {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wilted-plant {
+    position: relative;
+    animation: sway 3s ease-in-out infinite;
+}
+
+.error-pot {
+    font-size: 6rem;
+    display: block;
+    margin-bottom: var(--spacing-md);
+}
+
+.error-leaves {
+    position: absolute;
+    top: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.wilted-leaf {
+    font-size: 2rem;
+    animation: droop 2s ease-in-out infinite;
+}
+
+.wilted-leaf:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.wilted-leaf:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes droop {
+    0%, 100% { transform: rotate(0deg) translateY(0); }
+    50% { transform: rotate(10deg) translateY(5px); }
+}
+
+.error-text {
+    text-align: left;
+}
+
+.error-code {
+    font-size: 8rem;
+    font-weight: 700;
+    color: var(--primary-green);
+    margin: 0;
+    line-height: 1;
+    opacity: 0.8;
+}
+
+.error-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: var(--spacing-md) 0;
+}
+
+.error-message {
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-xl);
+}
+
+.error-suggestions {
+    margin: var(--spacing-xl) 0;
+    padding: var(--spacing-lg);
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 8px var(--shadow-light);
+}
+
+.error-suggestions h3 {
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.suggestion-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.suggestion-list li {
+    margin: var(--spacing-sm) 0;
+}
+
+.suggestion-list a {
+    color: var(--primary-green);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition-base);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.suggestion-list a:hover {
+    color: var(--accent-yellow);
+    transform: translateX(5px);
+}
+
+.error-actions {
+    margin-top: var(--spacing-xl);
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .error-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .error-text {
+        text-align: center;
+    }
+    
+    .error-actions {
+        justify-content: center;
+    }
+    
+    .error-code {
+        font-size: 6rem;
+    }
+}
+</style>
+{% endblock %}

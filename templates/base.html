@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Track your plant watering schedule with ease">
+    <meta name="theme-color" content="#3C9A5F">
+    <title>{% block title %}Plant Watering Tracker{% endblock %}</title>
+    
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" as="style">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header class="header">
+        <div class="container">
+            <div class="navbar">
+                <div class="navbar-brand">
+                    <a href="{{ url_for('index') }}" class="brand-link">
+                        <span class="brand-icon">🌱</span>
+                        <span class="brand-text">PlantCare</span>
+                    </a>
+                </div>
+                
+                <nav class="navbar-nav" id="navbar">
+                    <a href="{{ url_for('index') }}" class="nav-link {{ 'active' if request.endpoint == 'index' else '' }}" aria-label="Home page">
+                        🏠 <span>Home</span>
+                    </a>
+                    <a href="{{ url_for('add') }}" class="nav-link {{ 'active' if request.endpoint == 'add' else '' }}" aria-label="Add new plant">
+                        ➕ <span>Add Plant</span>
+                    </a>
+                    <a href="{{ url_for('about') }}" class="nav-link {{ 'active' if request.endpoint == 'about' else '' }}" aria-label="About page">
+                        ℹ️ <span>About</span>
+                    </a>
+                </nav>
+                
+                <button class="navbar-toggle" onclick="toggleNavbar()" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="page-content">
+        <div class="container">
+            <!-- Flash Messages (for future use) -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert-card {{ 'danger' if category == 'error' else category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Page Content -->
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <span class="brand-icon">🌱</span>
+                        <span class="brand-text">PlantCare</span>
+                    </div>
+                    <p class="footer-description">
+                        Keep your plants healthy and happy with smart watering reminders.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('index') }}">Home</a></li>
+                        <li><a href="{{ url_for('add') }}">Add Plant</a></li>
+                        <li><a href="{{ url_for('about') }}">About</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Features</h4>
+                    <ul class="footer-links">
+                        <li>Smart Reminders</li>
+                        <li>Watering History</li>
+                        <li>Plant Care Tips</li>
+                        <li>Progress Tracking</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="GitHub">🐈</a>
+                        <a href="#" class="social-link" aria-label="Twitter">🐦</a>
+                        <a href="#" class="social-link" aria-label="Email">📧</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 PlantCare. Made with ❤️ for plant lovers everywhere.</p>
+                <p class="footer-tech">Built with Flask & 🐍 Python</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Optional JavaScript -->
+    {% block scripts %}
+    <script>
+        // Simple loading state management
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add loading state to buttons on form submission
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function() {
+                    const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.classList.add('loading');
+                        submitBtn.disabled = true;
+                    }
+                });
+            });
+
+            // Add loading state to water buttons
+            const waterLinks = document.querySelectorAll('a[href*="/water/"]');
+            waterLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    this.classList.add('loading');
+                    this.style.pointerEvents = 'none';
+                });
+            });
+
+            // Animate elements on page load
+            const animatedElements = document.querySelectorAll('.card, .alert-card');
+            animatedElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+
+        // Respect reduced motion preferences
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.style.setProperty('--transition-base', 'none');
+            document.documentElement.style.setProperty('--transition-fast', 'none');
+            document.documentElement.style.setProperty('--transition-slow', 'none');
+        }
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Mobile navbar toggle
+        window.toggleNavbar = function() {
+            const navbar = document.getElementById('navbar');
+            const toggle = document.querySelector('.navbar-toggle');
+            navbar.classList.toggle('active');
+            toggle.classList.toggle('active');
+        };
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navbar = document.getElementById('navbar');
+            const toggle = document.querySelector('.navbar-toggle');
+            
+            if (!navbar.contains(event.target) && !toggle.contains(event.target)) {
+                navbar.classList.remove('active');
+                toggle.classList.remove('active');
+            }
+        });
+    </script>
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error - PlantCare{% endblock %}
+
+{% block content %}
+<section class="error-section">
+    <div class="error-content">
+        <div class="error-illustration">
+            <div class="sick-plant">
+                <span class="error-pot">🪴</span>
+                <div class="error-symptoms">
+                    <span class="sick-emoji">😷</span>
+                    <div class="error-bubbles">
+                        <span class="error-bubble">💥</span>
+                        <span class="error-bubble">⚠️</span>
+                        <span class="error-bubble">🔧</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="error-text">
+            <h1 class="error-code">500</h1>
+            <h2 class="error-title">Our plant care system needs some attention!</h2>
+            <p class="error-message">
+                Something went wrong on our end - like a plant that needs emergency care. 
+                Our gardeners (developers) have been notified and are working to fix this right away!
+            </p>
+            
+            <div class="error-suggestions">
+                <h3>While we fix this, you can try:</h3>
+                <ul class="suggestion-list">
+                    <li><a href="{{ url_for('index') }}">🏠 Return to your plant dashboard</a></li>
+                    <li><a href="javascript:location.reload()">🔄 Refresh this page</a></li>
+                    <li><a href="javascript:history.back()">⬅️ Go back to the previous page</a></li>
+                </ul>
+            </div>
+            
+            <div class="error-actions">
+                <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">
+                    🌱 Back to Dashboard
+                </a>
+                <a href="javascript:location.reload()" class="btn btn-secondary btn-lg">
+                    🔄 Try Again
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.sick-plant {
+    position: relative;
+    animation: shake 0.8s ease-in-out infinite;
+}
+
+.error-symptoms {
+    position: absolute;
+    top: -1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sick-emoji {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-sm);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.error-bubbles {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.error-bubble {
+    font-size: 1.5rem;
+    animation: float 2s ease-in-out infinite;
+}
+
+.error-bubble:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.error-bubble:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+</style>
+{% endblock %}

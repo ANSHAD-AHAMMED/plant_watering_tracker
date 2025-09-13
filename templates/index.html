@@ -1,47 +1,171 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Plant Watering Tracker</title>
-</head>
-<body>
-    <h1>🌱 Plant Watering Tracker</h1>
+{% extends "base.html" %}
 
-    <a href="{{ url_for('add') }}">➕ Add New Plant</a>
+{% block title %}Home - Plant Watering Tracker{% endblock %}
 
-    <h2>Plant List</h2>
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>Name</th>
-            <th>Last Watered</th>
-            <th>Frequency (days)</th>
-            <th>Actions</th>
-        </tr>
-        {% for plant in plants %}
-        <tr>
-            <td>{{ plant.name }}</td>
-            <td>{{ plant.last_watered }}</td>
-            <td>{{ plant.frequency }}</td>
-            <td>
-                <a href="{{ url_for('water', id=plant.id) }}">💧 Water</a> |
-                <a href="{{ url_for('history', id=plant.id) }}">📜 History</a>
-            </td>
-        </tr>
-        {% else %}
-        <tr>
-            <td colspan="4">No plants added yet.</td>
-        </tr>
-        {% endfor %}
-    </table>
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1 class="hero-title">
+                <span class="hero-emoji">🌱</span>
+                Keep Your Plants
+                <span class="hero-highlight">Happy & Healthy</span>
+            </h1>
+            <p class="hero-subtitle">
+                Never forget to water your plants again! Track watering schedules, 
+                get smart reminders, and watch your green friends thrive.
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">{{ plant_data|length if plant_data else 0 }}</div>
+                    <div class="stat-label">Plants Tracked</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">{{ plant_data|map(attribute='plant.history')|map('length')|sum if plant_data else 0 }}</div>
+                    <div class="stat-label">Total Waterings</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">{{ alerts|length if alerts else 0 }}</div>
+                    <div class="stat-label">Need Attention</div>
+                </div>
+            </div>
+            <div class="hero-actions">
+                {% if not plant_data %}
+                    <a href="{{ url_for('add') }}" class="btn btn-primary btn-lg hero-cta">
+                        🌱 Start Your Plant Journey
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('add') }}" class="btn btn-primary btn-lg hero-cta">
+                        ➕ Add New Plant
+                    </a>
+                {% endif %}
+                <a href="{{ url_for('about') }}" class="btn btn-secondary btn-lg">
+                    📚 Learn More
+                </a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="plant-illustration">
+                <div class="plant-pot">
+                    <div class="plant-leaves">
+                        <span class="leaf leaf-1">🍃</span>
+                        <span class="leaf leaf-2">🍂</span>
+                        <span class="leaf leaf-3">🍁</span>
+                        <span class="leaf leaf-4">🍀</span>
+                        <span class="plant-main">🌱</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <h2>⚠️ Alerts</h2>
-    {% if alerts %}
-        <ul>
-        {% for alert in alerts %}
-            <li>{{ alert }} needs watering today!</li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No plants need watering today 🎉</p>
+<!-- Features Section -->
+{% if not plant_data %}
+<section class="features-section">
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">⏰</div>
+            <h3>Smart Reminders</h3>
+            <p>Never miss a watering with personalized schedules for each plant</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Track Progress</h3>
+            <p>Monitor your plant care journey with detailed watering history</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🌿</div>
+            <h3>Plant Library</h3>
+            <p>Organize all your plants in one beautiful, easy-to-use interface</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💡</div>
+            <h3>Care Tips</h3>
+            <p>Get helpful suggestions for optimal plant care and growth</p>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<div class="home-header">
+    {% if plant_data %}
+        <h2 style="text-align: center; margin-bottom: 2rem; color: var(--text-primary);">Your Plant Collection</h2>
     {% endif %}
-</body>
-</html>
+</div>
+
+<!-- Alerts Section -->
+{% if alerts %}
+<section class="alerts-section">
+    <h3 style="margin-bottom: 1rem; color: var(--text-primary);">🚨 Plants Needing Attention</h3>
+    <div class="alert-card {{ 'danger' if alerts|length > 0 else '' }}">
+        <ul class="alert-list">
+            {% for alert in alerts %}
+                <li>{{ alert }} needs watering!</li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+{% else %}
+    {% if plant_data %}
+    <section class="alerts-section">
+        <div class="no-alerts">
+            All your plants are happy and healthy!
+        </div>
+    </section>
+    {% endif %}
+{% endif %}
+
+<!-- Plants Grid -->
+{% if plant_data %}
+<section class="plants-section">
+    <div class="card-grid">
+        {% for data in plant_data %}
+        <div class="card plant-card {{ data.status }}" data-status="{{ data.status }}">
+            <div class="plant-name">
+                🌱 {{ data.plant.name }}
+                {% if data.status == 'overdue' %}
+                    <span class="badge badge-danger" aria-live="polite">{{ data.status_text }}</span>
+                {% elif data.status == 'due_today' %}
+                    <span class="badge badge-warning" aria-live="polite">{{ data.status_text }}</span>
+                {% elif data.status == 'due_soon' %}
+                    <span class="badge badge-warning">{{ data.status_text }}</span>
+                {% else %}
+                    <span class="badge badge-success">{{ data.status_text }}</span>
+                {% endif %}
+                
+                {% if data.watered_today %}
+                    <span class="badge badge-success">✅ Watered today</span>
+                {% endif %}
+            </div>
+            
+            <div class="plant-info">
+                <p><strong>Last watered:</strong> {{ data.last_watered_human }}</p>
+                <p><strong>Watering frequency:</strong> Every {{ data.plant.frequency }} day{{ "s" if data.plant.frequency > 1 else "" }}</p>
+                <p><strong>Next watering:</strong> {{ data.due_date.strftime('%B %d, %Y') }}</p>
+            </div>
+            
+            <div class="plant-actions">
+                <a href="{{ url_for('water', id=data.plant.id) }}" 
+                   class="btn btn-water"
+                   aria-label="Water {{ data.plant.name }}">
+                    💧 Water Plant
+                </a>
+                <a href="{{ url_for('history', id=data.plant.id) }}" 
+                   class="btn btn-secondary"
+                   aria-label="View watering history for {{ data.plant.name }}">
+                    📜 History
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- Quick Action -->
+<div style="text-align: center; margin-top: 3rem;">
+    <a href="{{ url_for('add') }}" class="btn btn-primary btn-lg">➕ Add New Plant</a>
+</div>
+{% endblock %}

@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block title %}About - PlantCare{% endblock %}
+
+{% block content %}
+<!-- About Hero Section -->
+<section class="about-hero">
+    <div class="about-hero-content">
+        <h1 class="about-title">
+            <span class="about-emoji">🌱</span>
+            About PlantCare
+        </h1>
+        <p class="about-subtitle">
+            Your personal plant care assistant, designed to help you keep your green friends thriving 
+            with smart reminders and easy tracking.
+        </p>
+    </div>
+</section>
+
+<!-- Mission Section -->
+<section class="mission-section">
+    <div class="container">
+        <div class="mission-content">
+            <div class="mission-text">
+                <h2>Our Mission</h2>
+                <p>
+                    We believe everyone deserves to have healthy, thriving plants in their life. 
+                    PlantCare was created to bridge the gap between plant enthusiasts and successful plant parenting 
+                    by providing simple, effective tools for plant care management.
+                </p>
+                <p>
+                    Whether you're a seasoned green thumb or just starting your plant journey, 
+                    PlantCare helps you build sustainable habits that keep your plants happy and healthy.
+                </p>
+            </div>
+            <div class="mission-visual">
+                <div class="mission-illustration">
+                    <div class="plant-grid">
+                        <span class="mission-plant">🌱</span>
+                        <span class="mission-plant">🌿</span>
+                        <span class="mission-plant">🪴</span>
+                        <span class="mission-plant">🌵</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Showcase -->
+<section class="features-showcase">
+    <div class="container">
+        <h2 class="section-title">Why Choose PlantCare?</h2>
+        <div class="showcase-grid">
+            <div class="showcase-item">
+                <div class="showcase-icon">⏰</div>
+                <h3>Smart Reminders</h3>
+                <p>Never forget to water your plants again with personalized schedules tailored to each plant's needs.</p>
+                <ul class="feature-list">
+                    <li>Custom watering frequencies</li>
+                    <li>Intelligent notifications</li>
+                    <li>Flexible scheduling</li>
+                </ul>
+            </div>
+            
+            <div class="showcase-item">
+                <div class="showcase-icon">📊</div>
+                <h3>Progress Tracking</h3>
+                <p>Monitor your plant care journey with detailed history and beautiful visualizations.</p>
+                <ul class="feature-list">
+                    <li>Comprehensive watering history</li>
+                    <li>Growth timeline tracking</li>
+                    <li>Care statistics</li>
+                </ul>
+            </div>
+            
+            <div class="showcase-item">
+                <div class="showcase-icon">🌿</div>
+                <h3>Plant Organization</h3>
+                <p>Keep all your plants organized in one beautiful, intuitive interface.</p>
+                <ul class="feature-list">
+                    <li>Easy plant management</li>
+                    <li>Status indicators</li>
+                    <li>Quick actions</li>
+                </ul>
+            </div>
+            
+            <div class="showcase-item">
+                <div class="showcase-icon">💡</div>
+                <h3>Care Insights</h3>
+                <p>Get helpful tips and insights to improve your plant care routine.</p>
+                <ul class="feature-list">
+                    <li>Plant care guidance</li>
+                    <li>Best practices</li>
+                    <li>Troubleshooting help</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+{% if total_plants > 0 or total_waterings > 0 %}
+<section class="stats-section">
+    <div class="container">
+        <h2 class="section-title">PlantCare in Numbers</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🌱</div>
+                <div class="stat-number">{{ total_plants }}</div>
+                <div class="stat-label">Plants Tracked</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💧</div>
+                <div class="stat-number">{{ total_waterings }}</div>
+                <div class="stat-label">Waterings Recorded</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-number">{{ ((total_waterings / total_plants) if total_plants > 0 else 0)|round(1) }}</div>
+                <div class="stat-label">Average per Plant</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Technology Section -->
+<section class="tech-section">
+    <div class="container">
+        <h2 class="section-title">Built with Modern Technology</h2>
+        <div class="tech-grid">
+            <div class="tech-item">
+                <div class="tech-icon">🐍</div>
+                <h3>Python & Flask</h3>
+                <p>Robust backend powered by Python's Flask framework for reliable performance.</p>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">🗄️</div>
+                <h3>SQLAlchemy</h3>
+                <p>Secure and efficient data storage with SQLAlchemy ORM for plant and watering records.</p>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">🎨</div>
+                <h3>Modern CSS</h3>
+                <p>Beautiful, responsive design with CSS Grid, Flexbox, and custom animations.</p>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">📱</div>
+                <h3>Mobile First</h3>
+                <p>Fully responsive design that works seamlessly on all devices and screen sizes.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Get Started Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Ready to Start Your Plant Journey?</h2>
+            <p>Join the community of happy plant parents who never miss a watering!</p>
+            <div class="cta-actions">
+                <a href="{{ url_for('add') }}" class="btn btn-primary btn-lg">
+                    🌱 Add Your First Plant
+                </a>
+                <a href="{{ url_for('index') }}" class="btn btn-secondary btn-lg">
+                    🏠 Go to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section">
+    <div class="container">
+        <div class="contact-content">
+            <h2>Get in Touch</h2>
+            <p>Have questions, suggestions, or just want to share your plant success stories?</p>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <h3>Email</h3>
+                    <p>plantcare@example.com</p>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">🐙</div>
+                    <h3>GitHub</h3>
+                    <p>github.com/plantcare</p>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">🐦</div>
+                    <h3>Twitter</h3>
+                    <p>@plantcare_app</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate mission plants
+    const missionPlants = document.querySelectorAll('.mission-plant');
+    missionPlants.forEach((plant, index) => {
+        plant.style.animationDelay = `${index * 0.3}s`;
+    });
+    
+    // Animate stats on scroll
+    if ('IntersectionObserver' in window) {
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.transform = 'scale(1)';
+                    entry.target.style.opacity = '1';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.stat-card, .tech-item, .showcase-item').forEach(item => {
+            item.style.transform = 'scale(0.8)';
+            item.style.opacity = '0';
+            item.style.transition = 'all 0.6s ease-out';
+            statsObserver.observe(item);
+        });
+    }
+});
+</script>
+{% endblock %}
