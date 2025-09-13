@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Watering History - {{ plant.name }}</title>
+</head>
+<body>
+    <h1>Watering History for {{ plant.name }}</h1>
+
+    {% if plant.history %}
+        <ul>
+        {% for record in plant.history %}
+            <li>{{ record.date }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No watering history yet.</p>
+    {% endif %}
+
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Plant Watering Tracker</title>
+</head>
+<body>
+    <h1>🌱 Plant Watering Tracker</h1>
+
+    <a href="{{ url_for('add') }}">➕ Add New Plant</a>
+
+    <h2>Plant List</h2>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Name</th>
+            <th>Last Watered</th>
+            <th>Frequency (days)</th>
+            <th>Actions</th>
+        </tr>
+        {% for plant in plants %}
+        <tr>
+            <td>{{ plant.name }}</td>
+            <td>{{ plant.last_watered }}</td>
+            <td>{{ plant.frequency }}</td>
+            <td>
+                <a href="{{ url_for('water', id=plant.id) }}">💧 Water</a> |
+                <a href="{{ url_for('history', id=plant.id) }}">📜 History</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4">No plants added yet.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>⚠️ Alerts</h2>
+    {% if alerts %}
+        <ul>
+        {% for alert in alerts %}
+            <li>{{ alert }} needs watering today!</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No plants need watering today 🎉</p>
+    {% endif %}
+</body>
+</html>
